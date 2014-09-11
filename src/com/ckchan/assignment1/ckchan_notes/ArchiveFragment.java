@@ -6,7 +6,9 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
- 
+
+//Creates Archive tab 
+//Displays all archived tasks from TODO tab
 public class ArchiveFragment extends Fragment {
  
     @Override

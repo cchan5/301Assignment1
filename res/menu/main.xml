@@ -5,8 +5,14 @@
 
     <item
         android:id="@+id/action_settings"
-        android:orderInCategory="100"
+        android:orderInCategory="1"
         android:title="@string/action_settings"
         app:showAsAction="never"/>
+    
+    <item
+        android:id="@+id/summary_info"
+        android:orderInCategory="2"
+        android:title="@string/summary_info"
+        android:showAsAction="never"/>
 
 </menu>

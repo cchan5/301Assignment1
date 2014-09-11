@@ -5,7 +5,7 @@
     android:versionName="1.0" >
 
     <uses-sdk
-        android:minSdkVersion="14"
+        android:minSdkVersion="16"
         android:targetSdkVersion="20" />
 
     <application
@@ -22,6 +22,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        
+        <activity
+            android:name="com.ckchan.assignment1.ckchan_notes.SummaryInfo.java"
+            android:label="@string/summary_info"
+            android:parentActivityName="com.ckchan.assignment1.ckchan_notes.MainActivity">
+		</activity>
+		
     </application>
 
 </manifest>
