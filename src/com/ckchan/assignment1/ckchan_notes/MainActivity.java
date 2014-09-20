@@ -1,7 +1,7 @@
 package com.ckchan.assignment1.ckchan_notes;
 
+import android.widget.EditText;
 import com.ckchan.assignment1.adapter.TabsPagerAdapter;
-import com.ckchan.assignment1.ckchan_notes.R;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.app.ActionBar;
@@ -11,15 +11,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.EditText;
 
 
 public class MainActivity extends FragmentActivity implements ActionBar.TabListener{
     private ViewPager viewPager;
-    private TabsPagerAdapter mAdapter;
+    private TabsPagerAdapter tabsPagerAdapter;
     private ActionBar actionBar;
+    private static final String TAG = "MainActivity";
     // Tab titles
+    //In string array in case more tabs need to be added
     private String[] tabs = { "TODO", "Archive" };
 	
 
@@ -27,30 +27,29 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        
-        //Initialization of viewpager
+
+
+        //Initialization of viewPager
         viewPager = (ViewPager) findViewById(R.id.pager);
         actionBar = getActionBar();
-        mAdapter = new TabsPagerAdapter(getSupportFragmentManager());
- 
-        viewPager.setAdapter(mAdapter);
+        tabsPagerAdapter = new TabsPagerAdapter(getSupportFragmentManager());
+
+        viewPager.setAdapter(tabsPagerAdapter);
         actionBar.setHomeButtonEnabled(false);
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);  
-        
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+
         // Adding Tabs
         for (String tab_name : tabs) {
             actionBar.addTab(actionBar.newTab().setText(tab_name)
-                    .setTabListener(this));     
+                    .setTabListener(this));
         }
     
         
-        //On swiping the viewpager make respective tab selected   
+
         viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
          
 	        @Override
 	        public void onPageSelected(int position) {
-	            // on changing the page
-	            // make respected tab selected
 	            actionBar.setSelectedNavigationItem(position);
 	        }
 	     
@@ -97,7 +96,6 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
         }
     }
 
-
 	@Override
 	//When tabs are selected 
 	public void onTabReselected(Tab tab, FragmentTransaction ft) {
@@ -105,10 +103,10 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		
 	}
 
-
 	@Override
 	public void onTabSelected(Tab tab, FragmentTransaction ft) {
-		viewPager.setCurrentItem(tab.getPosition());
+
+        viewPager.setCurrentItem(tab.getPosition());
 	}
 
 
@@ -120,7 +118,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	
 	//Starts new SummaryInfo activity
     private void SummaryInfo() {
-        Intent i = new Intent(MainActivity.this, SummaryInfo.class);
+        Intent i = new Intent(MainActivity.this, SummaryInfoActivity.class);
         startActivity(i);
     }
     

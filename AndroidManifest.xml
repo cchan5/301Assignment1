@@ -10,7 +10,7 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@drawable/ic_launcher"
+        android:icon="@android:drawable/checkbox_on_background"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
@@ -24,7 +24,7 @@
         </activity>
         
         <activity
-            android:name="com.ckchan.assignment1.ckchan_notes.SummaryInfo.java"
+            android:name="com.ckchan.assignment1.ckchan_notes.SummaryInfoActivity"
             android:label="@string/summary_info"
             android:parentActivityName="com.ckchan.assignment1.ckchan_notes.MainActivity">
 		</activity>

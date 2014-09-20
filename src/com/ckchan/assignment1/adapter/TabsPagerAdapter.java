@@ -5,7 +5,8 @@ import com.ckchan.assignment1.ckchan_notes.ArchiveFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
- 
+//Bits of code taken from:
+//http://stackoverflow.com/questions/16149778/how-do-i-use-fragmentpageradapter-to-have-tabs-with-different-content
 public class TabsPagerAdapter extends FragmentPagerAdapter {
  
     public TabsPagerAdapter(FragmentManager fm) {
@@ -13,9 +14,9 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
     }
  
     @Override
-    public Fragment getItem(int index) {
+    public Fragment getItem(int i) {
  
-        switch (index) {
+        switch (i) {
         case 0:
             // TODO List fragment activity
             return new TodoFragment();
@@ -30,7 +31,7 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
  
     @Override
     public int getCount() {
-        // get item count - equal to number of tabs
+        // 2 Tabs
         return 2;
     }
  

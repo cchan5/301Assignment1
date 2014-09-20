@@ -5,15 +5,13 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent" android:weightSum="1">
 
-    <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/checkBox"/>
-    <TextView
-            android:layout_width="187dp"
-            android:layout_height="51dp"
-            android:id="@+id/textView" android:layout_weight="0.85" android:textIsSelectable="true"
-            android:longClickable="true" android:editable="false"/>
-
+    <CheckedTextView
+        android:id="@+id/checkedTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:checkMark="?android:attr/listChoiceIndicatorMultiple"
+        android:checked="true"
+        android:clickable="true"
+        android:text="CheckedTextView" />
 
 </LinearLayout>
