@@ -1,7 +1,8 @@
 package com.ckchan.assignment1.adapter;
 
-import com.ckchan.assignment1.ckchan_notes.TodoFragment;
-import com.ckchan.assignment1.ckchan_notes.ArchiveFragment;
+import com.ckchan.assignment1.ckchan_todolist.ArchiveFragment;
+import com.ckchan.assignment1.ckchan_todolist.TodoFragment;
+
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
