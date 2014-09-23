@@ -1096,8 +1096,8 @@ containing a value of this type.
         public static final int add_button=0x7f05003f;
         public static final int always=0x7f05000b;
         public static final int beginning=0x7f050011;
+        public static final int checkBox1=0x7f050042;
         public static final int checkbox=0x7f05002d;
-        public static final int checkedTextView=0x7f050042;
         public static final int collapseActionView=0x7f05000d;
         public static final int default_activity_button=0x7f050028;
         public static final int delete_item=0x7f050043;

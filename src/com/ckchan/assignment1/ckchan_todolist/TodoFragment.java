@@ -120,18 +120,18 @@ public class TodoFragment extends Fragment implements AbsListView.MultiChoiceMod
         
         
         
-        checkedTextView = (CheckedTextView) taskView.findViewById(R.id.checkedTextView);
-        checkedTextView.setOnClickListener(new View.OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				if (checkedTextView.isChecked()) {
-					checkedTextView.setChecked(false);
-				}else {
-					checkedTextView.setChecked(true);
-				}			
-			}
-		});
+//        checkedTextView = (CheckedTextView) taskView.findViewById(R.id.checkedTextView);
+//        checkedTextView.setOnClickListener(new View.OnClickListener() {
+//			
+//			@Override
+//			public void onClick(View v) {
+//				if (checkedTextView.isChecked()) {
+//					checkedTextView.setChecked(false);
+//				}else {
+//					checkedTextView.setChecked(true);
+//				}			
+//			}
+//		});
 
         return rootView;
     }
