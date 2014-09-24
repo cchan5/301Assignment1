@@ -51,45 +51,45 @@ public class SummaryInfoActivity extends Activity {
         textView = (TextView) findViewById(R.id.textView1);
         
         //Gets number of tasks and number of checked items from TODO list
-        try {
-        	
-			taskStrArray = taskDatabase.loadTaskData(context, taskStrArray);
-			checkedItemsJsonArray = taskDatabase.loadCheckedItems(context, checkedItemsJsonArray);
-			taskCount = taskStrArray.size();
-			
-			archiveStrArray = archiveDatabase.loadTaskData(context, archiveStrArray);
-			checkedArchiveJsonArray = archiveDatabase.loadCheckedItems(context, checkedArchiveJsonArray);
-			archiveCount = archiveStrArray.size();
-			
-	        if (checkedItemsJsonArray != null) {
-	        	
-				for (int i = 0; i < checkedItemsJsonArray.length(); i++) {
-					
-					boolean isChecked = checkedItemsJsonArray.getBoolean(i);	
-					if (isChecked == true) {
-						
-						checkedItemsCount++;
-					}
-				}
-	        }	  	        
-	        if (checkedArchiveJsonArray != null) {
-	        	
-				for (int i = 0; i < checkedArchiveJsonArray.length(); i++) {
-					
-					boolean isChecked = checkedArchiveJsonArray.getBoolean(i);	
-					if (isChecked == true) {
-						
-						checkedArchiveCount++;
-					}
-				}
-	        }
-		} catch (JSONException e) {
-			
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}   
-        //Output to textView1
-        textView.setText(taskCount + " total tasks.\n");
-        textView.append(checkedItemsCount + " checked tasks.\n");
+//        try {
+//        	
+//			taskStrArray = taskDatabase.loadTaskData(context);
+//			checkedItemsJsonArray = taskDatabase.loadCheckedItems(context);
+//			taskCount = taskStrArray.size();
+//			
+//			archiveStrArray = archiveDatabase.loadTaskData(context);
+//			checkedArchiveJsonArray = archiveDatabase.loadCheckedItems(context);
+//			archiveCount = archiveStrArray.size();
+//			
+//	        if (checkedItemsJsonArray != null) {
+//	        	
+//				for (int i = 0; i < checkedItemsJsonArray.length(); i++) {
+//					
+//					boolean isChecked = checkedItemsJsonArray.getBoolean(i);	
+//					if (isChecked == true) {
+//						
+//						checkedItemsCount++;
+//					}
+//				}
+//	        }	  	        
+//	        if (checkedArchiveJsonArray != null) {
+//	        	
+//				for (int i = 0; i < checkedArchiveJsonArray.length(); i++) {
+//					
+//					boolean isChecked = checkedArchiveJsonArray.getBoolean(i);	
+//					if (isChecked == true) {
+//						
+//						checkedArchiveCount++;
+//					}
+//				}
+//	        }
+//		} catch (JSONException e) {
+//			
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}   
+//        //Output to textView1
+//        textView.setText(taskCount + " total tasks.\n");
+//        textView.append(checkedItemsCount + " checked tasks.\n");
     }
 }

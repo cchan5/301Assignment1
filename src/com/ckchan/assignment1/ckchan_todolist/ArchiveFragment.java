@@ -45,82 +45,82 @@ public class ArchiveFragment extends Fragment {
         listView.setLongClickable(true);
         arrayAdapter.setNotifyOnChange(false);
         
-        loadTasks(archiveStrArray,checkedArchiveJsonArray, context);  	
+//        loadTasks(archiveStrArray,checkedArchiveJsonArray, context);  	
         arrayAdapter.notifyDataSetChanged();     
         
         return rootView;
     }
-    public void onPause() {
-    	
-    	super.onPause();
-	    try {
-	    	
-	    	saveTasks();
-		} catch (JSONException e) {
-			
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-    }
+//    public void onPause() {
+//    	
+//    	super.onPause();
+//	    try {
+//	    	
+//	    	saveTasks();
+//		} catch (JSONException e) {
+//			
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//    }
+//    
+//    public void onResume() {
+//    	
+//    	super.onResume();
+//    	loadTasks(archiveStrArray,checkedArchiveJsonArray, context);
+//    }
+//    
+//    public void onStop() {
+//    	
+//    	super.onStop();
+//    	try {
+//    		
+//			saveTasks();
+//		} catch (JSONException e) {
+//			
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//    }
+//    
+//    public void onDestroy() {
+//    	super.onDestroy();
+//    	try {
+//    		
+//			saveTasks();
+//		} catch (JSONException e) {
+//			
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//    }
     
-    public void onResume() {
-    	
-    	super.onResume();
-    	loadTasks(archiveStrArray,checkedArchiveJsonArray, context);
-    }
-    
-    public void onStop() {
-    	
-    	super.onStop();
-    	try {
-    		
-			saveTasks();
-		} catch (JSONException e) {
-			
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-    }
-    
-    public void onDestroy() {
-    	super.onDestroy();
-    	try {
-    		
-			saveTasks();
-		} catch (JSONException e) {
-			
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-    }
-    
-    private void saveTasks() throws JSONException {
-    	
-    	int count = listView.getAdapter().getCount();
-	    archiveDatabase.saveTaskData(context, archiveStrArray);
-	    checkedArchiveArray = listView.getCheckedItemPositions();
-	    archiveDatabase.saveCheckedItems(context, checkedArchiveArray, count);
-	}
-    
-	private void loadTasks(ArrayList<String> archiveStrArray, JSONArray checkedArchiveJsonArray, final Context context) {
-		
-		try {
-			
-			archiveStrArray = archiveDatabase.loadTaskData(context,archiveStrArray);
-			checkedArchiveJsonArray = archiveDatabase.loadCheckedItems(context, checkedArchiveJsonArray);
-			
-			if (checkedArchiveJsonArray != null) {
-				
-				for (int i = 0; i < checkedArchiveJsonArray.length(); i++) {
-					
-					boolean isChecked = checkedArchiveJsonArray.getBoolean(i);
-					listView.setItemChecked(i, isChecked);
-				}
-			}		
-		} catch (JSONException e) {
-			
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
+//    private void saveTasks() throws JSONException {
+//    	
+//    	int count = listView.getAdapter().getCount();
+//	    archiveDatabase.saveTaskData(context, archiveStrArray);
+//	    checkedArchiveArray = listView.getCheckedItemPositions();
+//	    archiveDatabase.saveCheckedItems(context, checkedArchiveArray, count);
+//	}
+//    
+//	private void loadTasks(ArrayList<String> archiveStrArray, JSONArray checkedArchiveJsonArray, final Context context) {
+//		
+//		try {
+//			
+//			archiveStrArray = archiveDatabase.loadTaskData(context);
+//			checkedArchiveJsonArray = archiveDatabase.loadCheckedItems(context);
+//			
+//			if (checkedArchiveJsonArray != null) {
+//				
+//				for (int i = 0; i < checkedArchiveJsonArray.length(); i++) {
+//					
+//					boolean isChecked = checkedArchiveJsonArray.getBoolean(i);
+//					listView.setItemChecked(i, isChecked);
+//				}
+//			}		
+//		} catch (JSONException e) {
+//			
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//	}
 } 

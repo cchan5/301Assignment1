@@ -118,6 +118,18 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		
 	}
 	
+	public class CheckedTasks {
+		
+		private boolean checked = false;
+		
+		public void setChecked(boolean checked) {
+			this.checked = checked;
+		}
+		
+		public boolean isChecked() {
+			return checked;
+		}
+	}
 	
 	//Starts new SummaryInfo activity
     private void SummaryInfo() {

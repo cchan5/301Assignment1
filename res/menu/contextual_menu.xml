@@ -6,6 +6,7 @@
         android:icon="@android:drawable/ic_menu_delete"
         android:showAsAction="ifRoom|withText"
         android:title="Delete"
-        android:titleCondensed="Delete selection"/>
+        android:titleCondensed="Delete selection"
+        />
 
 </menu>

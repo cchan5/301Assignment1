@@ -28,7 +28,8 @@
             android:layout_height="wrap_content"
             android:id="@+id/listView"
             android:layout_centerHorizontal="true"
-            android:layout_below="@+id/editText"/>
+            android:layout_below="@+id/editText"
+            android:choiceMode="multipleChoice"/>
 
 
 </RelativeLayout>
