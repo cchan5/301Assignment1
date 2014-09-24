@@ -36,12 +36,13 @@ public class TodoFragment extends Fragment {
     private ListView listView;
     private EditText editText;
 //    private ArrayList<String> taskStrArray;
-    private ArrayList<TodoTask> taskArray;
+    private List<TodoTask> taskArray;
     private TaskArrayAdapter arrayAdapter;
     private Context context;
     private SparseBooleanArray checkedItemsArray;
     private JSONArray checkedItemsJsonArray;
     private TaskDatabase taskDatabase = new TaskDatabase();
+    private List<Integer> selectedPositions = new ArrayList<Integer>();
 
 
     //Creates the TODO tab
@@ -99,7 +100,18 @@ public class TodoFragment extends Fragment {
 				
 				switch (item.getItemId()) {
 				case R.id.delete_item:
-					
+					for (Integer position : selectedPositions) {
+						TodoTask removedTask = taskArray.remove(position.intValue());
+						arrayAdapter.remove(removedTask);
+						arrayAdapter.notifyDataSetChanged();
+					}
+					try {
+						saveTasks();
+						
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 				return false;
 			}
@@ -108,7 +120,13 @@ public class TodoFragment extends Fragment {
 			public void onItemCheckedStateChanged(ActionMode mode, int position,
 					long id, boolean checked) {
 				
-				// TODO Auto-generated method stub	
+				if (checked) {
+					selectedPositions.add(new Integer(position));
+				}else {
+					selectedPositions.remove(new Integer(position));
+				}
+				
+				
 			}
 		});
         listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
@@ -196,10 +214,10 @@ public class TodoFragment extends Fragment {
 		
 		try {
 			
-			List<TodoTask> taskArray = taskDatabase.loadTaskData(context);	
+			taskArray = taskDatabase.loadTaskData(context);	
 			
 			if (taskArray != null) {
-				
+				// TODO: modify to use clear and add all TodoTasks from taskArray
 				arrayAdapter = new TaskArrayAdapter(context, taskArray);
 				listView.setAdapter(arrayAdapter);
 			}			
