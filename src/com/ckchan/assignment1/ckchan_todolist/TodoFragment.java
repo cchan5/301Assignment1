@@ -21,6 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.json.JSONArray;
@@ -30,17 +31,14 @@ import com.ckchan.assignment1.adapter.TaskArrayAdapter;
 import com.ckchan.assignment1.adapter.TaskArrayAdapter.ViewHolder;
 import com.ckchan.assignment1.ckchan_notes.R;
 
-public class TodoFragment extends Fragment {
+public class TodoFragment extends Fragment implements TaskFragmentInterface{
 	
     private Button addButton;
     private ListView listView;
     private EditText editText;
-//    private ArrayList<String> taskStrArray;
     private List<TodoTask> taskArray;
     private TaskArrayAdapter arrayAdapter;
     private Context context;
-    private SparseBooleanArray checkedItemsArray;
-    private JSONArray checkedItemsJsonArray;
     private TaskDatabase taskDatabase = new TaskDatabase();
     private List<Integer> selectedPositions = new ArrayList<Integer>();
 
@@ -52,7 +50,6 @@ public class TodoFragment extends Fragment {
     	
     	context = getActivity();
         View rootView = inflater.inflate(R.layout.fragment_todo, container, false);
-        View taskView = inflater.inflate(R.layout.task_textview, container,false);
 
         //Initialization
         addButton = (Button) rootView.findViewById(R.id.add_button);
@@ -91,27 +88,57 @@ public class TodoFragment extends Fragment {
 			public boolean onCreateActionMode(ActionMode mode, Menu menu) {
 				
 				MenuInflater menuInflater = getActivity().getMenuInflater();
-				menuInflater.inflate(R.menu.contextual_menu, menu);				
+				menuInflater.inflate(R.menu.todo_contextual_menu, menu);				
 				return true;
 			}
 			
 			@Override
 			public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-				
+				int id = item.getItemId();
 				switch (item.getItemId()) {
-				case R.id.delete_item:
+				case R.id.delete_items:
+					
+					int deletedCount = 0;
+					Collections.sort(selectedPositions);
 					for (Integer position : selectedPositions) {
-						TodoTask removedTask = taskArray.remove(position.intValue());
+						
+						TodoTask removedTask = taskArray.remove(position.intValue() - deletedCount);
 						arrayAdapter.remove(removedTask);
 						arrayAdapter.notifyDataSetChanged();
+						deletedCount++;
 					}
 					try {
-						saveTasks();
 						
+						saveTasks();		
+						selectedPositions.clear();
 					} catch (JSONException e) {
+						
 						// TODO Auto-generated catch block
 						e.printStackTrace();
+					}	
+					break;
+				case R.id.archive_items:
+					
+					int archiveCount = 0;
+					Collections.sort(selectedPositions);
+					for (Integer position : selectedPositions) {
+						
+						TodoTask removedTask = taskArray.remove(position.intValue() - archiveCount);
+						try {
+							
+							taskDatabase.appendArchiveTask(context, removedTask);
+							arrayAdapter.remove(removedTask);
+							arrayAdapter.notifyDataSetChanged();
+							saveTasks();
+							archiveCount++;
+						} catch (JSONException e) {
+							
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}						
 					}
+					selectedPositions.clear();
+					break;
 				}
 				return false;
 			}
@@ -124,9 +151,7 @@ public class TodoFragment extends Fragment {
 					selectedPositions.add(new Integer(position));
 				}else {
 					selectedPositions.remove(new Integer(position));
-				}
-				
-				
+				}	
 			}
 		});
         listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
@@ -159,52 +184,13 @@ public class TodoFragment extends Fragment {
         return rootView;
     }
     
+	@Override
+	public void onArticleSelected() {
+		
+		loadTasks(context);
+		arrayAdapter.notifyDataSetChanged();
+	}
 	
-//    public void onPause() {
-//    	
-//    	super.onPause();
-//	    try {
-//	    	
-//			saveTasks();
-//		} catch (JSONException e) {
-//			
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//    }
-//    
-//    public void onResume() {
-//    	
-//    	super.onResume();
-////    	loadTasks(taskStrArray,checkedItemsJsonArray, context);
-//    }
-//    
-//    public void onStop() {
-//    	
-//    	super.onStop();
-//    	try {
-//    		
-//			saveTasks();
-//		} catch (JSONException e) {
-//			
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//    }
-//    
-//    public void onDestroy() {
-//    	
-//    	super.onDestroy();
-//    	try {
-//    		
-//			saveTasks();
-//		} catch (JSONException e) {
-//			
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//    }
-//    
     private void saveTasks() throws JSONException {
     	
 	    taskDatabase.saveTaskData(context, taskArray);
@@ -217,7 +203,7 @@ public class TodoFragment extends Fragment {
 			taskArray = taskDatabase.loadTaskData(context);	
 			
 			if (taskArray != null) {
-				// TODO: modify to use clear and add all TodoTasks from taskArray
+				
 				arrayAdapter = new TaskArrayAdapter(context, taskArray);
 				listView.setAdapter(arrayAdapter);
 			}			
@@ -227,6 +213,4 @@ public class TodoFragment extends Fragment {
 			e.printStackTrace();
 		}
 	}
-
-
 }

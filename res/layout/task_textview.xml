@@ -22,6 +22,6 @@
         android:layout_alignBaseline="@+id/checkBox"
         android:layout_alignBottom="@+id/checkBox"
         android:layout_toRightOf="@+id/checkBox"
-        android:text="TextView" />
+        android:layout_gravity="center" />
  
 </RelativeLayout>

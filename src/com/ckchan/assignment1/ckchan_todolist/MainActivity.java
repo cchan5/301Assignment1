@@ -50,7 +50,24 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	        @Override
 	        public void onPageSelected(int position) {
 	        	
-	            actionBar.setSelectedNavigationItem(position);
+	        	//Execute code in onArticleSelected when tab is selected
+	            switch (position) {
+	            case 0:
+	            	//This code was from:
+	            	//http://stackoverflow.com/questions/20412379/viewpager-update-fragment-on-swipe 2014-09-23
+	            	TodoFragment todoFragment = (TodoFragment) tabsPagerAdapter.instantiateItem(viewPager, position);
+	            	if (todoFragment != null) {
+	            		todoFragment.onArticleSelected();
+	            	}
+	            	break;
+	            case 1:
+	            	ArchiveFragment archiveFragment = (ArchiveFragment) tabsPagerAdapter.instantiateItem(viewPager, position);
+	            	if (archiveFragment != null) {
+	            		archiveFragment.onArticleSelected();
+	            	}
+	            	break;
+	            }    	
+	            actionBar.setSelectedNavigationItem(position); //Switch to selected tab
 	        }
 	     
 	        @Override

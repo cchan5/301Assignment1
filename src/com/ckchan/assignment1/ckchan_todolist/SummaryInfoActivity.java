@@ -20,26 +20,23 @@ import android.widget.TextView;
 public class SummaryInfoActivity extends Activity {
 	
 	private TaskDatabase taskDatabase = new TaskDatabase();
-	private ArchiveDatabase archiveDatabase = new ArchiveDatabase();
 
-	
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
 		
-		ArrayList<String> taskStrArray = new ArrayList<String>();
-		ArrayList<String> archiveStrArray = new ArrayList<String>();
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_summary_info);
+        
+		ArrayList<TodoTask> taskArray = new ArrayList<TodoTask>();
+		ArrayList<TodoTask> archiveArray = new ArrayList<TodoTask>();
 		Context context;
-		JSONArray checkedItemsJsonArray = new JSONArray();
-		JSONArray checkedArchiveJsonArray = new JSONArray();
-		TextView textView;
-		
+		TextView textView = (TextView) findViewById(R.id.textView1);
+
 		int taskCount = 0;
-		int checkedItemsCount = 0;
+		int checkedTaskCount = 0;
 		int archiveCount = 0;
 		int checkedArchiveCount = 0;
 		
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_summary_info);
         context = getApplicationContext();
         
         // Get action bar  
@@ -48,48 +45,42 @@ public class SummaryInfoActivity extends Activity {
         // Enabling Up / Back navigation
         actionBar.setDisplayHomeAsUpEnabled(true);
                
-        textView = (TextView) findViewById(R.id.textView1);
-        
-        //Gets number of tasks and number of checked items from TODO list
-//        try {
-//        	
-//			taskStrArray = taskDatabase.loadTaskData(context);
-//			checkedItemsJsonArray = taskDatabase.loadCheckedItems(context);
-//			taskCount = taskStrArray.size();
-//			
-//			archiveStrArray = archiveDatabase.loadTaskData(context);
-//			checkedArchiveJsonArray = archiveDatabase.loadCheckedItems(context);
-//			archiveCount = archiveStrArray.size();
-//			
-//	        if (checkedItemsJsonArray != null) {
-//	        	
-//				for (int i = 0; i < checkedItemsJsonArray.length(); i++) {
-//					
-//					boolean isChecked = checkedItemsJsonArray.getBoolean(i);	
-//					if (isChecked == true) {
-//						
-//						checkedItemsCount++;
-//					}
-//				}
-//	        }	  	        
-//	        if (checkedArchiveJsonArray != null) {
-//	        	
-//				for (int i = 0; i < checkedArchiveJsonArray.length(); i++) {
-//					
-//					boolean isChecked = checkedArchiveJsonArray.getBoolean(i);	
-//					if (isChecked == true) {
-//						
-//						checkedArchiveCount++;
-//					}
-//				}
-//	        }
-//		} catch (JSONException e) {
-//			
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}   
-//        //Output to textView1
-//        textView.setText(taskCount + " total tasks.\n");
-//        textView.append(checkedItemsCount + " checked tasks.\n");
+        try {
+        	
+			taskArray = (ArrayList<TodoTask>) taskDatabase.loadTaskData(context);
+			taskCount = taskArray.size();
+			
+			archiveArray = (ArrayList<TodoTask>) taskDatabase.loadArchiveData(context);
+			archiveCount = archiveArray.size();
+			
+	        checkedTaskCount = getCheckCount(taskArray, checkedTaskCount);	  	        
+	        checkedArchiveCount = getCheckCount(archiveArray, checkedArchiveCount);
+	        
+		} catch (JSONException e) {
+			
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}   
+        //Output to textView1
+        textView.setText("Total number of tasks: " + taskCount + "\n");
+        textView.append("Number of checked tasks: " + checkedTaskCount + "\n");
+        textView.append("Total number of archived tasks: " + archiveCount + "\n");
+        textView.append("Number of checked archived tasks: " + checkedArchiveCount + "\n");
     }
+
+	private int getCheckCount(ArrayList<TodoTask> taskArray,
+			int checkedTaskCount) {
+		if (taskArray != null) {
+			
+			for (TodoTask task : taskArray) {
+				
+				boolean checked = task.isChecked();	
+				if (checked == true) {
+					
+					checkedTaskCount++;
+				}
+			}
+		}
+		return checkedTaskCount;
+	}
 }

@@ -21,7 +21,36 @@ public class TaskDatabase implements DatabaseInterface {
    
         saveData(context, taskArray, taskPrefs);
     }
+    
+    public void saveArchiveData(Context context, List<TodoTask> taskArray) throws JSONException {
+    	   
+        saveData(context, taskArray, archivePrefs);
+    }
 
+    public List<TodoTask> loadTaskData(Context context) throws JSONException {
+        
+        return loadData(context, taskPrefs);
+    }
+    
+    public List<TodoTask> loadArchiveData(Context context) throws JSONException {
+        
+        return loadData(context, archivePrefs);
+    }
+	
+	public void appendTask (Context context, TodoTask todotask) throws JSONException {
+		
+		ArrayList<TodoTask> taskArray = (ArrayList<TodoTask>) loadData(context, taskPrefs);
+		taskArray.add(todotask);
+		saveData(context, taskArray, taskPrefs);
+	}
+	
+	public void appendArchiveTask (Context context, TodoTask todotask) throws JSONException {
+		
+		ArrayList<TodoTask> archiveArray = (ArrayList<TodoTask>) loadData(context, archivePrefs);
+		archiveArray.add(todotask);
+		saveData(context, archiveArray, archivePrefs);
+	}
+	
 	private void saveData(Context context, List<TodoTask> taskArray, String prefName)
 			throws JSONException {
 		SharedPreferences preferences = context.getSharedPreferences(prefName, Context.MODE_PRIVATE);
@@ -39,12 +68,7 @@ public class TaskDatabase implements DatabaseInterface {
         editor.putString("savedTasks", taskJsonArray.toString());
         editor.commit();
 	}
-
-    public List<TodoTask> loadTaskData(Context context) throws JSONException {
-        
-        return loadData(context, taskPrefs);
-    }
-
+	
 	private List<TodoTask> loadData(Context context, String prefName) throws JSONException {
 		SharedPreferences preferences = context.getSharedPreferences(prefName, Context.MODE_PRIVATE);             
         ArrayList<TodoTask> taskArray = new ArrayList<TodoTask>();
