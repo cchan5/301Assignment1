@@ -34,8 +34,10 @@ public class SummaryInfoActivity extends Activity {
 
 		int taskCount = 0;
 		int checkedTaskCount = 0;
+		int uncheckedTaskCount = 0;
 		int archiveCount = 0;
 		int checkedArchiveCount = 0;
+		int uncheckedArchiveCount = 0;
 		
         context = getApplicationContext();
         
@@ -56,6 +58,9 @@ public class SummaryInfoActivity extends Activity {
 	        checkedTaskCount = getCheckCount(taskArray, checkedTaskCount);	  	        
 	        checkedArchiveCount = getCheckCount(archiveArray, checkedArchiveCount);
 	        
+	        uncheckedTaskCount = getUncheckCount(taskArray, uncheckedTaskCount);	  	        
+	        uncheckedArchiveCount = getUncheckCount(archiveArray, uncheckedArchiveCount);
+	        
 		} catch (JSONException e) {
 			
 			// TODO Auto-generated catch block
@@ -64,23 +69,39 @@ public class SummaryInfoActivity extends Activity {
         //Output to textView1
         textView.setText("Total number of tasks: " + taskCount + "\n");
         textView.append("Number of checked tasks: " + checkedTaskCount + "\n");
+        textView.append("Number of unchecked tasks: " + uncheckedTaskCount + "\n");
         textView.append("Total number of archived tasks: " + archiveCount + "\n");
         textView.append("Number of checked archived tasks: " + checkedArchiveCount + "\n");
+        textView.append("Number of unchecked archived tasks: " + uncheckedArchiveCount + "\n");
     }
 
-	private int getCheckCount(ArrayList<TodoTask> taskArray,
-			int checkedTaskCount) {
+	private int getCheckCount(ArrayList<TodoTask> taskArray, int checkedTaskCount) {
 		if (taskArray != null) {
 			
 			for (TodoTask task : taskArray) {
 				
 				boolean checked = task.isChecked();	
-				if (checked == true) {
+				if (checked) {
 					
 					checkedTaskCount++;
-				}
+				} 
 			}
 		}
 		return checkedTaskCount;
+	}
+	
+	private int getUncheckCount(ArrayList<TodoTask> taskArray, int uncheckedTaskCount) {
+		if (taskArray != null) {
+			
+			for (TodoTask task : taskArray) {
+				
+				boolean checked = task.isChecked();	
+				if (!checked) {
+		
+					uncheckedTaskCount++;
+				}
+			}
+		}
+		return uncheckedTaskCount;
 	}
 }

@@ -1,6 +1,7 @@
 package com.ckchan.assignment1.ckchan_todolist;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
@@ -8,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckedTextView;
 import android.widget.ListView;
+import android.widget.Toast;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -139,6 +141,49 @@ public class TodoFragment extends Fragment implements TaskFragmentInterface{
 					}
 					selectedPositions.clear();
 					break;
+				case R.id.email_items:
+					
+					Collections.sort(selectedPositions);
+					//This code was from:
+					//http://stackoverflow.com/questions/2197741/how-can-i-send-emails-from-my-android-application 2014-09-24
+					try {
+						
+						Email email = taskDatabase.loadEmailAddress(context);
+						//StringBuilder code from:
+						//http://stackoverflow.com/questions/12899953/in-java-how-to-append-a-string-more-efficiently
+						StringBuilder stringBuilder = new StringBuilder();
+						
+						if (email != null) {
+							
+							Intent i = new Intent(Intent.ACTION_SEND);
+							i.setType("message/rfc822");
+							i.putExtra(Intent.EXTRA_EMAIL  , new String[]{email.getAddress()});
+							i.putExtra(Intent.EXTRA_SUBJECT, "Todo Tasks");
+							
+							for (Integer position : selectedPositions) {
+								
+								TodoTask task = taskArray.get(position);
+								stringBuilder.append(task.getTaskDescription() + "\n");
+							}	
+							
+							String emailContent = stringBuilder.toString();
+							i.putExtra(Intent.EXTRA_TEXT   , emailContent);
+							
+							try {
+								
+							    startActivity(Intent.createChooser(i, "Send mail..."));
+							} catch (android.content.ActivityNotFoundException ex) {
+								
+							    Toast.makeText(context, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
+							}
+						}
+						
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+					selectedPositions.clear();
 				}
 				return false;
 			}

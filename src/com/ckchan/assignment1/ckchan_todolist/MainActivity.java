@@ -1,5 +1,9 @@
 package com.ckchan.assignment1.ckchan_todolist;
 
+import java.util.ArrayList;
+
+import org.json.JSONException;
+
 import com.ckchan.assignment1.adapter.TabsPagerAdapter;
 import com.ckchan.assignment1.ckchan_notes.R;
 
@@ -8,10 +12,12 @@ import android.support.v4.view.ViewPager;
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 
 public class MainActivity extends FragmentActivity implements ActionBar.TabListener{
@@ -100,6 +106,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_settings) {
+        	Settings();
             return true;
         }
         
@@ -108,8 +115,52 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	        case R.id.summary_info:
 	            SummaryInfo();
 	            return true;
-	        case R.id.action_settings:
-	            return true;
+	        case R.id.email_all:
+	        	try {
+					
+	        		Context context = getApplicationContext();
+					TaskDatabase taskDatabase = new TaskDatabase();;
+					Email email = taskDatabase.loadEmailAddress(context);
+					ArrayList<TodoTask> taskArray= (ArrayList<TodoTask>) taskDatabase.loadTaskData(context);
+					ArrayList<TodoTask> archiveArray= (ArrayList<TodoTask>) taskDatabase.loadArchiveData(context);
+					//StringBuilder code from:
+					//http://stackoverflow.com/questions/12899953/in-java-how-to-append-a-string-more-efficiently
+					StringBuilder stringBuilder = new StringBuilder();
+					
+					if (email != null) {
+						
+						Intent i = new Intent(Intent.ACTION_SEND);
+						i.setType("message/rfc822");
+						i.putExtra(Intent.EXTRA_EMAIL  , new String[]{email.getAddress()});
+						i.putExtra(Intent.EXTRA_SUBJECT, "Todo and Archive Tasks");
+						
+						stringBuilder.append("Todo Tasks\n");
+						for (TodoTask task : taskArray) {
+							
+							stringBuilder.append(task.getTaskDescription() + "\n");
+						}	
+						stringBuilder.append("Archive Tasks\n");
+						for (TodoTask task : archiveArray) {
+							
+							stringBuilder.append(task.getTaskDescription() + "\n");
+						}
+						
+						String emailContent = stringBuilder.toString();
+						i.putExtra(Intent.EXTRA_TEXT   , emailContent);
+						
+						try {
+							
+						    startActivity(Intent.createChooser(i, "Send mail..."));
+						} catch (android.content.ActivityNotFoundException ex) {
+							
+						    Toast.makeText(context, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
+						}
+					}
+					
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 	        default:
 	        	return super.onOptionsItemSelected(item);
         }
@@ -151,6 +202,11 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	//Starts new SummaryInfo activity
     private void SummaryInfo() {
         Intent i = new Intent(MainActivity.this, SummaryInfoActivity.class);
+        startActivity(i);
+    }
+    
+    private void Settings() {
+    	Intent i = new Intent(MainActivity.this, SettingsActivity.class);
         startActivity(i);
     }
    

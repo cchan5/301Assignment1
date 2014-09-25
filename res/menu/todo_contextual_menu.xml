@@ -13,5 +13,11 @@
         android:showAsAction="ifRoom|withText"
         android:title="Archive"
         />
+    <item 
+        android:id="@+id/email_items"
+        android:icon="@drawable/ic_dialog_email"
+        android:showAsAction="ifRoom|withText"
+        android:title="Email"
+        />
 
 </menu>

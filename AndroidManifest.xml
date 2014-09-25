@@ -22,13 +22,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        
         <activity
             android:name="com.ckchan.assignment1.ckchan_todolist.SummaryInfoActivity"
             android:label="@string/summary_info"
-            android:parentActivityName="com.ckchan.assignment1.ckchan_todolist.MainActivity">
-		</activity>
-		
+            android:parentActivityName="com.ckchan.assignment1.ckchan_todolist.MainActivity" >
+        </activity>
+        <activity
+            android:name="com.ckchan.assignment1.ckchan_todolist.SettingsActivity"
+            android:label="@string/action_settings"
+            android:parentActivityName="com.ckchan.assignment1.ckchan_todolist.MainActivity" >
+        </activity>
     </application>
 
 </manifest>

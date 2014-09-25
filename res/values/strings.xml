@@ -8,5 +8,7 @@
     <string name="summary_info">Summaries</string>
     <string name="add_message">Add a task</string>
     <string name="button_add">Add</string>
+    <string name="button_email">Update Email</string>
+    <string name="email_all">Email All</string>
 
 </resources>

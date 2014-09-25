@@ -16,6 +16,7 @@ import org.json.JSONObject;
 public class TaskDatabase implements DatabaseInterface {
     public static final String taskPrefs = "TaskFile";
     public static final String archivePrefs = "ArchiveFile";
+    public static final String emailPrefs = "EmailAddress";
 
     public void saveTaskData(Context context, List<TodoTask> taskArray) throws JSONException {
    
@@ -51,6 +52,36 @@ public class TaskDatabase implements DatabaseInterface {
 		saveData(context, archiveArray, archivePrefs);
 	}
 	
+	public void saveEmailAddress(Context context, Email email) throws JSONException{
+		
+		saveEmail(context, email, emailPrefs);
+	}
+	
+	public Email loadEmailAddress(Context context) throws JSONException {
+		return loadEmail(context, emailPrefs);
+	}
+	
+	private Email loadEmail(Context context, String prefName) throws JSONException {
+		
+		SharedPreferences preferences = context.getSharedPreferences(prefName, Context.MODE_PRIVATE);
+		
+		String address = preferences.getString("emailAddress", null);
+//		JSONObject jsonEmail = new JSONObject(address);
+		Email email = new Email();
+		email.setAddress(address);
+		
+		return email;
+	}
+	private void saveEmail(Context context, Email email, String prefName) throws JSONException {
+		SharedPreferences preferences = context.getSharedPreferences(prefName, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        
+        JSONObject jsonEmail = new JSONObject();
+        jsonEmail.put("address", email.getAddress());
+        
+        editor.putString("emailAddress", email.getAddress());
+        editor.commit();
+	}
 	private void saveData(Context context, List<TodoTask> taskArray, String prefName)
 			throws JSONException {
 		SharedPreferences preferences = context.getSharedPreferences(prefName, Context.MODE_PRIVATE);
