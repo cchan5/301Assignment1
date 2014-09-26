@@ -1,0 +1,20 @@
+MainActivity:
+This is the main activity class that creates two tabs: the todo list and the archived tasks list. This class will also call three Activities through intents in the overflow menu: The "Summaries" option displays the summary of todo and archived tasks, the "Settings" option allows the user to set his or her email address for emailing the todo tasks, and finally the "Email All" option allows the user to send all todo tasks (including archived) to the email address set in "Settings".
+
+TabsPagerAdapter:
+This is a custom adapter that extends FragmentPagerAdapter. This class manages the tabs and creates the fragments corresponding to that tab.
+
+TodoTasks:
+This is an object that represents an todo item. It includes the description of the task and its state.
+
+TodoFragment:
+This is a fragment that manages all the todo tasks. The user can add tasks by entering its description in the textview and adding it to the listview by pressing a button. This class can save and load tasks using the TaskDatabase class, and the data is saved every time the button is pressed. The listview uses a MultiChoiceModeListener to select multiple items to delete, archive, or email items. The listview uses the custom adapter TaskArrayAdapter.
+
+ArchiveFragment:
+This is a fragment that manages all the archived tasks. This class can save and load archive tasks using the TaskDatabase class. The listview uses a MultiChoiceModeListener to select multiple items to delete, unarchive, or email items. The listview uses the custom adapter TaskArrayAdapter.
+
+TaskArrayAdapter:
+This is custom adapter that extends ArrayAdapter<TodoTask>. This class uses a viewholder as a pattern for a checkbox and textview object. This adapter will retrieve the item at a specified position and set the text and checked state of the TodoTask.
+
+TaskDatabase:
+This class uses SharedPreferences to store TodoTask objects, and JSON arrays are used to manually serialize and deserialize them. 
