@@ -29,12 +29,14 @@ public class SummaryInfoActivity extends Activity {
         
 		ArrayList<TodoTask> taskArray = new ArrayList<TodoTask>();
 		ArrayList<TodoTask> archiveArray = new ArrayList<TodoTask>();
+		
 		Context context;
 		TextView textView = (TextView) findViewById(R.id.textView1);
 
 		int taskCount = 0;
 		int checkedTaskCount = 0;
 		int uncheckedTaskCount = 0;
+		
 		int archiveCount = 0;
 		int checkedArchiveCount = 0;
 		int uncheckedArchiveCount = 0;

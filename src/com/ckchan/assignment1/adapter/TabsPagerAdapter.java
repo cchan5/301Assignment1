@@ -23,6 +23,7 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
         case 0:
             // TODO List fragment activity
             return new TodoFragment();
+            
         case 1:
             // Archive fragment activity
             return new ArchiveFragment();

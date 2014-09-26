@@ -7,6 +7,5 @@ import android.content.Context;
 public interface DatabaseInterface {
 	
 	public void saveTaskData(Context context, List<TodoTask> taskArray) throws JSONException;
-	public List<TodoTask> loadTaskData(Context context) throws JSONException;
-	
+	public List<TodoTask> loadTaskData(Context context) throws JSONException;	
 }

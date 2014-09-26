@@ -26,7 +26,7 @@ import android.widget.ListView;
 
 //Creates Archive tab 
 //Displays all archived tasks from Archive tab
-public class ArchiveFragment extends Fragment implements TaskFragmentInterface{
+public class ArchiveFragment extends Fragment implements TaskFragmentInterface {
 	
     private ListView listView;
     private List<TodoTask> archiveArray;
@@ -44,10 +44,18 @@ public class ArchiveFragment extends Fragment implements TaskFragmentInterface{
         View rootView = inflater.inflate(R.layout.fragment_archive, container, false);
 
         //Initialization
+        listView = (ListView) rootView.findViewById(R.id.listView1);                 
         archiveArray = new ArrayList<TodoTask>();
         arrayAdapter = new TaskArrayAdapter(context, archiveArray);
-        listView = (ListView) rootView.findViewById(R.id.listView1); 
-        listView.setAdapter(arrayAdapter);
+
+        listView.setAdapter(arrayAdapter);        
+        listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL); //For CAB
+        listView.setLongClickable(true);
+        arrayAdapter.setNotifyOnChange(false);
+        
+        //Load saved tasks into listView
+        loadTasks(context);  
+        arrayAdapter.notifyDataSetChanged();
         
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
         	
@@ -192,15 +200,7 @@ public class ArchiveFragment extends Fragment implements TaskFragmentInterface{
 					selectedPositions.remove(new Integer(position));
 				}	
 			}
-		});
-        
-        listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL); //For CAB
-        listView.setLongClickable(true);
-        arrayAdapter.setNotifyOnChange(false);
-        
-        //Load saved tasks into listView
-        loadTasks(context);  
-        arrayAdapter.notifyDataSetChanged();
+		});        
         return rootView;
     }  
     

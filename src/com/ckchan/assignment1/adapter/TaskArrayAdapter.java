@@ -31,6 +31,7 @@ public class TaskArrayAdapter extends ArrayAdapter<TodoTask> {
 
 		super(context, R.layout.task_textview, taskArray);
 		inflater = LayoutInflater.from(context);
+		
 		this.taskArray = taskArray;
 		this.taskDatabase = new TaskDatabase();
 		this.context = context;
@@ -80,16 +81,20 @@ public class TaskArrayAdapter extends ArrayAdapter<TodoTask> {
 
 			textView = (TextView) convertView.findViewById(R.id.textView);
 			checkBox = (CheckBox) convertView.findViewById(R.id.checkBox);
+			
 			convertView.setTag(new ViewHolder(textView, checkBox));
 
 			checkBox.setOnClickListener(new View.OnClickListener() {
 
 				@Override
 				public void onClick(View v) {
-
+					
+					//When a check box is clicked, a new task is created and initialized to the set state
+					//Then it replaces the task with the same id in the array
 					CheckBox checkBox2 = (CheckBox) v;
 					TodoTask task = (TodoTask) checkBox2.getTag();
 					task.setChecked(checkBox2.isChecked());
+					
 					try {
 						
 						if (taskArray.contains(task)) {

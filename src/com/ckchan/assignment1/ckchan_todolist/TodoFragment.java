@@ -33,7 +33,7 @@ import com.ckchan.assignment1.adapter.TaskArrayAdapter;
 import com.ckchan.assignment1.adapter.TaskArrayAdapter.ViewHolder;
 import com.ckchan.assignment1.ckchan_notes.R;
 
-public class TodoFragment extends Fragment implements TaskFragmentInterface{
+public class TodoFragment extends Fragment implements TaskFragmentInterface {
 	
     private Button addButton;
     private ListView listView;
@@ -56,15 +56,46 @@ public class TodoFragment extends Fragment implements TaskFragmentInterface{
         //Initialization
         addButton = (Button) rootView.findViewById(R.id.add_button);
         editText = (EditText) rootView.findViewById(R.id.editText);
+        listView = (ListView) rootView.findViewById(R.id.listView); 
         taskArray = new ArrayList<TodoTask>();
         arrayAdapter = new TaskArrayAdapter(context, taskArray);        
-        listView = (ListView) rootView.findViewById(R.id.listView);       
-        listView.setAdapter(arrayAdapter);
         
+        
+        listView.setAdapter(arrayAdapter);
+        listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL); //For CAB
+        listView.setLongClickable(true);
+        arrayAdapter.setNotifyOnChange(false);
+        
+        //Load saved tasks into listView
+        loadTasks(context); 
+        arrayAdapter.notifyDataSetChanged();
+        
+        //Takes text from editText and puts it in a new row when button is pressed
+        addButton.setOnClickListener(new View.OnClickListener() {
+        	
+            @Override
+            public void onClick(View v) {
+            	
+                TodoTask todoTask = new TodoTask(editText.getText().toString(),false);
+                taskArray.add(todoTask);
+                arrayAdapter.notifyDataSetChanged();
+                editText.setText(null); //Reset the text field
+                try {
+                	
+					saveTasks();
+				} catch (JSONException e) {
+					
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+            }
+        });
+       
         //Toggle check boxes when clicked
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
         	@Override
         	public void onItemClick(AdapterView<?> parent, View item, int position, long id) {
+        		
         		TodoTask todoTask = arrayAdapter.getItem(position);
         		todoTask.toggleChecked();
         		ViewHolder viewHolder = (ViewHolder) item.getTag();
@@ -99,10 +130,12 @@ public class TodoFragment extends Fragment implements TaskFragmentInterface{
 			public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
 				
 				switch (item.getItemId()) {
+				
 				case R.id.delete_items:
 					
 					int deletedCount = 0; //Used to make sure indices of the arraylist match the values in selectedPostions
 					Collections.sort(selectedPositions);
+					
 					for (Integer position : selectedPositions) {
 						
 						TodoTask removedTask = taskArray.remove(position.intValue() - deletedCount);
@@ -110,6 +143,7 @@ public class TodoFragment extends Fragment implements TaskFragmentInterface{
 						arrayAdapter.notifyDataSetChanged();
 						deletedCount++;
 					}
+					
 					try {
 						
 						saveTasks();		
@@ -120,10 +154,12 @@ public class TodoFragment extends Fragment implements TaskFragmentInterface{
 						e.printStackTrace();
 					}	
 					break;
+					
 				case R.id.archive_items:
 					
 					int archiveCount = 0;
 					Collections.sort(selectedPositions);
+					
 					for (Integer position : selectedPositions) {
 						
 						TodoTask removedTask = taskArray.remove(position.intValue() - archiveCount);
@@ -142,6 +178,7 @@ public class TodoFragment extends Fragment implements TaskFragmentInterface{
 					}
 					selectedPositions.clear();
 					break;
+					
 				case R.id.email_items:
 					
 					Collections.sort(selectedPositions);
@@ -180,7 +217,6 @@ public class TodoFragment extends Fragment implements TaskFragmentInterface{
 							    Toast.makeText(context, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
 							}
 						}
-						
 					} catch (JSONException e) {
 						
 						// TODO Auto-generated catch block
@@ -202,35 +238,8 @@ public class TodoFragment extends Fragment implements TaskFragmentInterface{
 					selectedPositions.remove(new Integer(position));
 				}	
 			}
-		});
-        
-        listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
-        listView.setLongClickable(true);
-        arrayAdapter.setNotifyOnChange(false);
-        
-        //Load saved tasks into listView
-        loadTasks(context); 
-        arrayAdapter.notifyDataSetChanged();
-        
-        //Takes text from editText and puts it in a new row when button is pressed
-        addButton.setOnClickListener(new View.OnClickListener() {
-        	
-            @Override
-            public void onClick(View v) {
-            	
-                TodoTask todoTask = new TodoTask(editText.getText().toString(),false);
-                taskArray.add(todoTask);
-                arrayAdapter.notifyDataSetChanged();
-                editText.setText(null); //Reset the text field
-                try {
-					saveTasks();
-				} catch (JSONException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-            }
-        });
-
+		});       
+               
         return rootView;
     }
     

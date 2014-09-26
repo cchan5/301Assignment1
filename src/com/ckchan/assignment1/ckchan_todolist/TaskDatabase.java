@@ -18,6 +18,7 @@ import org.json.JSONObject;
 //JSONObject methods from: http://www.json.org/javadoc/org/json/JSONObject.html 2014-09-24
 //Shared Preferences from: http://developer.android.com/guide/topics/data/data-storage.html 2014-09-20
 public class TaskDatabase implements DatabaseInterface {
+	
     public static final String taskPrefs = "TaskFile";
     public static final String archivePrefs = "ArchiveFile";
     public static final String emailPrefs = "EmailAddress";
@@ -76,6 +77,7 @@ public class TaskDatabase implements DatabaseInterface {
 		
 		return email;
 	}
+	
 	private void saveEmail(Context context, Email email, String prefName) throws JSONException {
 		
 		SharedPreferences preferences = context.getSharedPreferences(prefName, Context.MODE_PRIVATE);

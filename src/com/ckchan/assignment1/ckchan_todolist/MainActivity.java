@@ -33,13 +33,13 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.*/
 
-public class MainActivity extends FragmentActivity implements ActionBar.TabListener{
+public class MainActivity extends FragmentActivity implements ActionBar.TabListener {
 	
     private ViewPager viewPager;
     private TabsPagerAdapter tabsPagerAdapter;
     private ActionBar actionBar;
     
-    // Tab titles
+    //Tab titles
     //In string array in case more tabs need to be added
     private String[] tabs = { "TODO", "Archive" };
 	
@@ -72,6 +72,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	        	//Execute code in onArticleSelected when tab is selected
 	            switch (position) {
 	            case 0:
+	            	
 	            	//This code was from:
 	            	//http://stackoverflow.com/questions/20412379/viewpager-update-fragment-on-swipe 2014-09-23
 	            	TodoFragment todoFragment = (TodoFragment) tabsPagerAdapter.instantiateItem(viewPager, position);
@@ -80,7 +81,9 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	            		todoFragment.onArticleSelected();
 	            	}
 	            	break;
+	            	
 	            case 1:
+	            	
 	            	ArchiveFragment archiveFragment = (ArchiveFragment) tabsPagerAdapter.instantiateItem(viewPager, position);
 	            	if (archiveFragment != null) {
 	            		
@@ -126,17 +129,23 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
         
         //Handle presses on the action bar items
         switch (item.getItemId()) {
+        
 	        case R.id.summary_info:
+	        	
 	            SummaryInfo();
 	            return true;
+	            
 	        case R.id.email_all:
+	        	
 	        	try {
 					
 	        		Context context = getApplicationContext();
 					TaskDatabase taskDatabase = new TaskDatabase();;
 					Email email = taskDatabase.loadEmailAddress(context);
+					
 					ArrayList<TodoTask> taskArray= (ArrayList<TodoTask>) taskDatabase.loadTaskData(context);
 					ArrayList<TodoTask> archiveArray= (ArrayList<TodoTask>) taskDatabase.loadArchiveData(context);
+					
 					//StringBuilder code from:
 					//http://stackoverflow.com/questions/12899953/in-java-how-to-append-a-string-more-efficiently
 					StringBuilder stringBuilder = new StringBuilder();
@@ -149,16 +158,17 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 						i.putExtra(Intent.EXTRA_SUBJECT, "Todo and Archive Tasks");
 						
 						stringBuilder.append("Todo Tasks\n");
+						
 						for (TodoTask task : taskArray) {
 							
 							stringBuilder.append(task.getTaskDescription() + "\n");
 						}	
 						stringBuilder.append("Archive Tasks\n");
+						
 						for (TodoTask task : archiveArray) {
 							
 							stringBuilder.append(task.getTaskDescription() + "\n");
 						}
-						
 						String emailContent = stringBuilder.toString();
 						i.putExtra(Intent.EXTRA_TEXT   , emailContent);
 						
@@ -202,12 +212,14 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		
 	//Starts new SummaryInfo activity
     private void SummaryInfo() {
+    	
         Intent i = new Intent(MainActivity.this, SummaryInfoActivity.class);
         startActivity(i);
     }
     
     //Starts new Settings Activity
     private void Settings() {
+    	
     	Intent i = new Intent(MainActivity.this, SettingsActivity.class);
         startActivity(i);
     } 
