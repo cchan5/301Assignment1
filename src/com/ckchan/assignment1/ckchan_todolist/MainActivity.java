@@ -19,6 +19,19 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+/*Copyright 2014 Carly Chan
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.*/
 
 public class MainActivity extends FragmentActivity implements ActionBar.TabListener{
 	
@@ -30,7 +43,6 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     //In string array in case more tabs need to be added
     private String[] tabs = { "TODO", "Archive" };
 	
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
     	
@@ -46,11 +58,12 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
         actionBar.setHomeButtonEnabled(false);
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
-        // Adding Tabs
+        //Adding Tabs
         for (String tab_name : tabs) {
         	
             actionBar.addTab(actionBar.newTab().setText(tab_name).setTabListener(this));
         }
+        
         viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
          
 	        @Override
@@ -63,12 +76,14 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	            	//http://stackoverflow.com/questions/20412379/viewpager-update-fragment-on-swipe 2014-09-23
 	            	TodoFragment todoFragment = (TodoFragment) tabsPagerAdapter.instantiateItem(viewPager, position);
 	            	if (todoFragment != null) {
+	            		
 	            		todoFragment.onArticleSelected();
 	            	}
 	            	break;
 	            case 1:
 	            	ArchiveFragment archiveFragment = (ArchiveFragment) tabsPagerAdapter.instantiateItem(viewPager, position);
 	            	if (archiveFragment != null) {
+	            		
 	            		archiveFragment.onArticleSelected();
 	            	}
 	            	break;
@@ -85,8 +100,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	        public void onPageScrollStateChanged(int arg0) {
 	        	
 	        }
-        });
-        
+        });       
     }
 
     @Override
@@ -185,29 +199,16 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		// TODO Auto-generated method stub
 		
 	}
-	
-	public class CheckedTasks {
 		
-		private boolean checked = false;
-		
-		public void setChecked(boolean checked) {
-			this.checked = checked;
-		}
-		
-		public boolean isChecked() {
-			return checked;
-		}
-	}
-	
 	//Starts new SummaryInfo activity
     private void SummaryInfo() {
         Intent i = new Intent(MainActivity.this, SummaryInfoActivity.class);
         startActivity(i);
     }
     
+    //Starts new Settings Activity
     private void Settings() {
     	Intent i = new Intent(MainActivity.this, SettingsActivity.class);
         startActivity(i);
-    }
-   
+    } 
 }

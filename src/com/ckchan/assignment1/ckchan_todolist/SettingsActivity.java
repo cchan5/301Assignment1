@@ -14,12 +14,15 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+//Sets email address to where emails will be sent to
 public class SettingsActivity extends Activity {
 	
 	Context context;
 	EditText editText;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_settings);
 		
@@ -34,8 +37,7 @@ public class SettingsActivity extends Activity {
 			public void onClick(View v) {
 				
 				TaskDatabase taskDatabase = new TaskDatabase();	
-				Email email = new Email();
-				
+				Email email = new Email();			
 				email.setAddress(editText.getText().toString());
 				try {
 					

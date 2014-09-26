@@ -16,15 +16,16 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.TextView;
+
 //This code is from:
 //http://stackoverflow.com/questions/9990676/how-can-i-get-values-from-checkbox-in-android 2014-09-23
-
 public class TaskArrayAdapter extends ArrayAdapter<TodoTask> {
 
 	private LayoutInflater inflater;
 	private List<TodoTask> taskArray;
 	private TaskDatabase taskDatabase;
 	private Context context;
+	private String type;
 
 	public TaskArrayAdapter(Context context, List<TodoTask> taskArray) {
 
@@ -41,23 +42,28 @@ public class TaskArrayAdapter extends ArrayAdapter<TodoTask> {
 		private TextView textView;
 
 		public ViewHolder(TextView textView, CheckBox checkBox) {
+			
 			this.checkBox = checkBox;
 			this.textView = textView;
 		}
 
 		public CheckBox getCheckBox() {
+			
 			return checkBox;
 		}
 
 		public void setCheckBox(CheckBox checkBox) {
+			
 			this.checkBox = checkBox;
 		}
 
 		public TextView getTextView() {
+			
 			return textView;
 		}
 
 		public void setTextView(TextView textView) {
+			
 			this.textView = textView;
 		}
 	}
@@ -70,8 +76,6 @@ public class TaskArrayAdapter extends ArrayAdapter<TodoTask> {
 
 		if (convertView == null) {
 
-			// = (LayoutInflater)
-			// context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			convertView = inflater.inflate(R.layout.task_textview, null);
 
 			textView = (TextView) convertView.findViewById(R.id.textView);
@@ -87,11 +91,20 @@ public class TaskArrayAdapter extends ArrayAdapter<TodoTask> {
 					TodoTask task = (TodoTask) checkBox2.getTag();
 					task.setChecked(checkBox2.isChecked());
 					try {
+						
 						if (taskArray.contains(task)) {
+							
 							taskArray.set(taskArray.indexOf(task), task);
 						}
-						taskDatabase.saveTaskData(context, taskArray);
+						if (type == "task") {
+							
+							taskDatabase.saveTaskData(context, taskArray);
+						}else if (type == "archive") {
+							
+							taskDatabase.saveArchiveData(context, taskArray);
+						}
 					} catch (JSONException e) {
+						
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
@@ -119,5 +132,12 @@ public class TaskArrayAdapter extends ArrayAdapter<TodoTask> {
 	public void setTaskArray(ArrayList<TodoTask> taskArray) {
 		this.taskArray = taskArray;
 	}
-
+	
+	public void setArrayType(String type) {
+		this.type = type;
+	}
+	
+	public String getArrayType() {
+		return type;
+	}
 }

@@ -3,10 +3,7 @@ package com.ckchan.assignment1.ckchan_todolist;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import org.json.JSONArray;
 import org.json.JSONException;
-
 import com.ckchan.assignment1.adapter.TaskArrayAdapter;
 import com.ckchan.assignment1.adapter.TaskArrayAdapter.ViewHolder;
 import com.ckchan.assignment1.ckchan_notes.R;
@@ -23,13 +20,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import android.widget.ListView;
 
 //Creates Archive tab 
-//Displays all archived tasks from TODO tab
+//Displays all archived tasks from Archive tab
 public class ArchiveFragment extends Fragment implements TaskFragmentInterface{
 	
     private ListView listView;
@@ -38,7 +34,6 @@ public class ArchiveFragment extends Fragment implements TaskFragmentInterface{
     private Context context;
     private TaskDatabase taskDatabase = new TaskDatabase();
     private List<Integer> selectedPositions = new ArrayList<Integer>();
-
 
     //Creates the Archive tab
     @Override
@@ -51,13 +46,14 @@ public class ArchiveFragment extends Fragment implements TaskFragmentInterface{
         //Initialization
         archiveArray = new ArrayList<TodoTask>();
         arrayAdapter = new TaskArrayAdapter(context, archiveArray);
-        listView = (ListView) rootView.findViewById(R.id.listView1);
-
+        listView = (ListView) rootView.findViewById(R.id.listView1); 
         listView.setAdapter(arrayAdapter);
         
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        	
         	@Override
         	public void onItemClick(AdapterView<?> parent, View item, int position, long id) {
+        		
         		TodoTask todoTask = arrayAdapter.getItem(position);
         		todoTask.toggleChecked();
         		ViewHolder viewHolder = (ViewHolder) item.getTag();
@@ -65,6 +61,7 @@ public class ArchiveFragment extends Fragment implements TaskFragmentInterface{
         	}
 		});
         
+        //Use contextual action bar(CAB) to select multiple items
         listView.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
 			
 			@Override
@@ -93,8 +90,9 @@ public class ArchiveFragment extends Fragment implements TaskFragmentInterface{
 				switch (item.getItemId()) {
 				case R.id.delete_items:
 					
-					int deletedCount = 0;
+					int deletedCount = 0; //Used to make sure indices of the arraylist match the values in selectedPostions
 					Collections.sort(selectedPositions);
+					
 					for (Integer position : selectedPositions) {
 						
 						TodoTask removedTask = archiveArray.remove(position.intValue() - deletedCount);
@@ -111,15 +109,18 @@ public class ArchiveFragment extends Fragment implements TaskFragmentInterface{
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
+					break;
 				case R.id.unarchive_items:	
+					
 					int archiveCount = 0;
 					Collections.sort(selectedPositions);
+					
 					for (Integer position : selectedPositions) {
 						
 						TodoTask removedTask = archiveArray.remove(position.intValue() - archiveCount);
 						try {
 							
-							taskDatabase.appendTask(context, removedTask);
+							taskDatabase.appendTask(context, removedTask); //appends task to archiveArray stored in memory
 							arrayAdapter.remove(removedTask);
 							arrayAdapter.notifyDataSetChanged();
 							saveTasks();
@@ -135,13 +136,15 @@ public class ArchiveFragment extends Fragment implements TaskFragmentInterface{
 				case R.id.email_items:
 					
 					Collections.sort(selectedPositions);
-					//This code was from:
+					
+					//This code was taken and modified from:
 					//http://stackoverflow.com/questions/2197741/how-can-i-send-emails-from-my-android-application 2014-09-24
 					try {
 						
 						Email email = taskDatabase.loadEmailAddress(context);
+						
 						//StringBuilder code from:
-						//http://stackoverflow.com/questions/12899953/in-java-how-to-append-a-string-more-efficiently
+						//http://stackoverflow.com/questions/12899953/in-java-how-to-append-a-string-more-efficiently 2014-09-24
 						StringBuilder stringBuilder = new StringBuilder();
 						
 						if (email != null) {
@@ -155,8 +158,7 @@ public class ArchiveFragment extends Fragment implements TaskFragmentInterface{
 								
 								TodoTask task = archiveArray.get(position);
 								stringBuilder.append(task.getTaskDescription() + "\n");
-							}	
-							
+							}								
 							String emailContent = stringBuilder.toString();
 							i.putExtra(Intent.EXTRA_TEXT   , emailContent);
 							
@@ -170,11 +172,12 @@ public class ArchiveFragment extends Fragment implements TaskFragmentInterface{
 						}
 						
 					} catch (JSONException e) {
+						
 						// TODO Auto-generated catch block
 						e.printStackTrace();
-					}
-					
+					}				
 					selectedPositions.clear();
+					break;
 				}
 				return false;
 			}
@@ -190,19 +193,18 @@ public class ArchiveFragment extends Fragment implements TaskFragmentInterface{
 				}	
 			}
 		});
-        listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+        
+        listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL); //For CAB
         listView.setLongClickable(true);
         arrayAdapter.setNotifyOnChange(false);
         
         //Load saved tasks into listView
-        loadTasks(context);  	
+        loadTasks(context);  
         arrayAdapter.notifyDataSetChanged();
-        
-
         return rootView;
-    }
+    }  
     
-
+    //Loads saved tasks when tab is visible
 	@Override
 	public void onArticleSelected() {
 		
@@ -210,12 +212,12 @@ public class ArchiveFragment extends Fragment implements TaskFragmentInterface{
 		arrayAdapter.notifyDataSetChanged();
 	}
     
-    private void saveTasks() throws JSONException {
+    public void saveTasks() throws JSONException {
     	
 	    taskDatabase.saveArchiveData(context, archiveArray);
 	}
     
-	private void loadTasks(final Context context) {
+	public void loadTasks(final Context context) {
 		
 		try {
 			
@@ -224,6 +226,7 @@ public class ArchiveFragment extends Fragment implements TaskFragmentInterface{
 			if (archiveArray != null) {
 				
 				arrayAdapter = new TaskArrayAdapter(context, archiveArray);
+				arrayAdapter.setArrayType("archive");
 				listView.setAdapter(arrayAdapter);
 			}			
 		} catch (JSONException e) {

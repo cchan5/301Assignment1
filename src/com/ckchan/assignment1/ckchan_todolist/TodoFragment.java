@@ -57,11 +57,11 @@ public class TodoFragment extends Fragment implements TaskFragmentInterface{
         addButton = (Button) rootView.findViewById(R.id.add_button);
         editText = (EditText) rootView.findViewById(R.id.editText);
         taskArray = new ArrayList<TodoTask>();
-        arrayAdapter = new TaskArrayAdapter(context, taskArray);
-        listView = (ListView) rootView.findViewById(R.id.listView);
-
+        arrayAdapter = new TaskArrayAdapter(context, taskArray);        
+        listView = (ListView) rootView.findViewById(R.id.listView);       
         listView.setAdapter(arrayAdapter);
         
+        //Toggle check boxes when clicked
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
         	@Override
         	public void onItemClick(AdapterView<?> parent, View item, int position, long id) {
@@ -72,6 +72,7 @@ public class TodoFragment extends Fragment implements TaskFragmentInterface{
         	}
 		});
         
+        //Use contextual action bar(CAB) to select multiple items
         listView.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
 			
 			@Override
@@ -96,11 +97,11 @@ public class TodoFragment extends Fragment implements TaskFragmentInterface{
 			
 			@Override
 			public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-				int id = item.getItemId();
+				
 				switch (item.getItemId()) {
 				case R.id.delete_items:
 					
-					int deletedCount = 0;
+					int deletedCount = 0; //Used to make sure indices of the arraylist match the values in selectedPostions
 					Collections.sort(selectedPositions);
 					for (Integer position : selectedPositions) {
 						
@@ -128,7 +129,7 @@ public class TodoFragment extends Fragment implements TaskFragmentInterface{
 						TodoTask removedTask = taskArray.remove(position.intValue() - archiveCount);
 						try {
 							
-							taskDatabase.appendArchiveTask(context, removedTask);
+							taskDatabase.appendArchiveTask(context, removedTask); //appends task to archiveArray stored in memory
 							arrayAdapter.remove(removedTask);
 							arrayAdapter.notifyDataSetChanged();
 							saveTasks();
@@ -144,13 +145,15 @@ public class TodoFragment extends Fragment implements TaskFragmentInterface{
 				case R.id.email_items:
 					
 					Collections.sort(selectedPositions);
+					
 					//This code was from:
 					//http://stackoverflow.com/questions/2197741/how-can-i-send-emails-from-my-android-application 2014-09-24
 					try {
 						
 						Email email = taskDatabase.loadEmailAddress(context);
+						
 						//StringBuilder code from:
-						//http://stackoverflow.com/questions/12899953/in-java-how-to-append-a-string-more-efficiently
+						//http://stackoverflow.com/questions/12899953/in-java-how-to-append-a-string-more-efficiently 2014-09-24
 						StringBuilder stringBuilder = new StringBuilder();
 						
 						if (email != null) {
@@ -179,11 +182,12 @@ public class TodoFragment extends Fragment implements TaskFragmentInterface{
 						}
 						
 					} catch (JSONException e) {
+						
 						// TODO Auto-generated catch block
 						e.printStackTrace();
-					}
-					
+					}					
 					selectedPositions.clear();
+					break;
 				}
 				return false;
 			}
@@ -199,15 +203,16 @@ public class TodoFragment extends Fragment implements TaskFragmentInterface{
 				}	
 			}
 		});
+        
         listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
         listView.setLongClickable(true);
         arrayAdapter.setNotifyOnChange(false);
         
         //Load saved tasks into listView
-        loadTasks(context);  	
+        loadTasks(context); 
         arrayAdapter.notifyDataSetChanged();
         
-        //Takes text from editText and puts it in a new row
+        //Takes text from editText and puts it in a new row when button is pressed
         addButton.setOnClickListener(new View.OnClickListener() {
         	
             @Override
@@ -229,6 +234,7 @@ public class TodoFragment extends Fragment implements TaskFragmentInterface{
         return rootView;
     }
     
+    //Loads saved tasks when tab is visible
 	@Override
 	public void onArticleSelected() {
 		
@@ -236,12 +242,12 @@ public class TodoFragment extends Fragment implements TaskFragmentInterface{
 		arrayAdapter.notifyDataSetChanged();
 	}
 	
-    private void saveTasks() throws JSONException {
+    public void saveTasks() throws JSONException {
     	
 	    taskDatabase.saveTaskData(context, taskArray);
 	}
     
-	private void loadTasks(final Context context) {
+	public void loadTasks(final Context context) {
 		
 		try {
 			
@@ -250,6 +256,7 @@ public class TodoFragment extends Fragment implements TaskFragmentInterface{
 			if (taskArray != null) {
 				
 				arrayAdapter = new TaskArrayAdapter(context, taskArray);
+				arrayAdapter.setArrayType("task");
 				listView.setAdapter(arrayAdapter);
 			}			
 		} catch (JSONException e) {

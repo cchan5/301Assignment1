@@ -13,6 +13,10 @@ import org.json.JSONObject;
 /**
  * Created by Carly on 15/09/2014.
  */
+
+//JSONArray methods from: http://developer.android.com/reference/org/json/JSONArray.html 2014-09-20
+//JSONObject methods from: http://www.json.org/javadoc/org/json/JSONObject.html 2014-09-24
+//Shared Preferences from: http://developer.android.com/guide/topics/data/data-storage.html 2014-09-20
 public class TaskDatabase implements DatabaseInterface {
     public static final String taskPrefs = "TaskFile";
     public static final String archivePrefs = "ArchiveFile";
@@ -23,9 +27,9 @@ public class TaskDatabase implements DatabaseInterface {
         saveData(context, taskArray, taskPrefs);
     }
     
-    public void saveArchiveData(Context context, List<TodoTask> taskArray) throws JSONException {
+    public void saveArchiveData(Context context, List<TodoTask> archiveArray) throws JSONException {
     	   
-        saveData(context, taskArray, archivePrefs);
+        saveData(context, archiveArray, archivePrefs);
     }
 
     public List<TodoTask> loadTaskData(Context context) throws JSONException {
@@ -38,17 +42,17 @@ public class TaskDatabase implements DatabaseInterface {
         return loadData(context, archivePrefs);
     }
 	
-	public void appendTask (Context context, TodoTask todotask) throws JSONException {
+	public void appendTask (Context context, TodoTask todoTask) throws JSONException {
 		
 		ArrayList<TodoTask> taskArray = (ArrayList<TodoTask>) loadData(context, taskPrefs);
-		taskArray.add(todotask);
+		taskArray.add(todoTask);
 		saveData(context, taskArray, taskPrefs);
 	}
 	
-	public void appendArchiveTask (Context context, TodoTask todotask) throws JSONException {
+	public void appendArchiveTask (Context context, TodoTask todoTask) throws JSONException {
 		
 		ArrayList<TodoTask> archiveArray = (ArrayList<TodoTask>) loadData(context, archivePrefs);
-		archiveArray.add(todotask);
+		archiveArray.add(todoTask);
 		saveData(context, archiveArray, archivePrefs);
 	}
 	
@@ -58,6 +62,7 @@ public class TaskDatabase implements DatabaseInterface {
 	}
 	
 	public Email loadEmailAddress(Context context) throws JSONException {
+		
 		return loadEmail(context, emailPrefs);
 	}
 	
@@ -66,13 +71,13 @@ public class TaskDatabase implements DatabaseInterface {
 		SharedPreferences preferences = context.getSharedPreferences(prefName, Context.MODE_PRIVATE);
 		
 		String address = preferences.getString("emailAddress", null);
-//		JSONObject jsonEmail = new JSONObject(address);
 		Email email = new Email();
 		email.setAddress(address);
 		
 		return email;
 	}
 	private void saveEmail(Context context, Email email, String prefName) throws JSONException {
+		
 		SharedPreferences preferences = context.getSharedPreferences(prefName, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         
@@ -82,8 +87,10 @@ public class TaskDatabase implements DatabaseInterface {
         editor.putString("emailAddress", email.getAddress());
         editor.commit();
 	}
+	
 	private void saveData(Context context, List<TodoTask> taskArray, String prefName)
 			throws JSONException {
+		
 		SharedPreferences preferences = context.getSharedPreferences(prefName, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         
@@ -96,17 +103,18 @@ public class TaskDatabase implements DatabaseInterface {
         	taskJsonArray.put(jsonTask);
         }
 
-        editor.putString("savedTasks", taskJsonArray.toString());
+        editor.putString(prefName, taskJsonArray.toString());
         editor.commit();
 	}
 	
 	private List<TodoTask> loadData(Context context, String prefName) throws JSONException {
+		
 		SharedPreferences preferences = context.getSharedPreferences(prefName, Context.MODE_PRIVATE);             
         ArrayList<TodoTask> taskArray = new ArrayList<TodoTask>();
         
         if (preferences != null) {
         	
-	        String taskStrJsonString = preferences.getString("savedTasks", null);
+	        String taskStrJsonString = preferences.getString(prefName, null);
 	        
 	        if (taskStrJsonString != null){
 	        	
@@ -123,3 +131,5 @@ public class TaskDatabase implements DatabaseInterface {
         return taskArray;
 	}
 }
+
+//Portions of this page are modifications based on work created and shared by the Android Open Source Project and used according to terms described in the Creative Commons 2.5 Attribution License. 

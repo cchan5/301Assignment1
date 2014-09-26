@@ -1,5 +1,6 @@
 package com.ckchan.assignment1.ckchan_todolist;
 
+//Implemented similar to Planet object from: http://stackoverflow.com/questions/9990676/how-can-i-get-values-from-checkbox-in-android 2014-09-23
 public class TodoTask {
 	private String taskDescription = "";
 	private boolean checked = false;
@@ -27,9 +28,5 @@ public class TodoTask {
 	
 	public void toggleChecked() {
 		checked = !checked;
-	}
-	
-	public String toString() {
-		return taskDescription;
 	}
 }
